@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from guessing_game import *
 import time
 
@@ -75,6 +75,26 @@ def guessing_game():
 
 def reverse_guessing_game():
     print("This is the reverse guessing game.")
+    low = intput("Please enter the lower bound")
+    high = intput("Please enter the upper bound")
+    phrases = ["Is the number?", "Is it?", "Could it be?", "What is?", "It has to be!",
+               "My guess is!", "I know it's!", "My senses tell me the number is.",
+               "Roses are red,\nViolets are blue,\nThe number must be."]
+    while True:
+        guess = randint(low, high)
+        phrase = choice(phrases)
+        print("{} {}{}".format(phrase[:-1], guess, phrase[-1]))
+        answer = intput("1. Higher\n2. Lower\n3. Correct")
+        if (answer != 3 and high == low) or not (low < high):
+            print("I have no idea then! You must've mislead me.")
+            break
+        elif answer == 1:
+            low = guess + 1
+        elif answer == 2:
+            high = guess - 1
+        else:
+            print("Yay!")
+            break
 
 
 def cows_and_bulls():
