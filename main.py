@@ -1,3 +1,10 @@
+"""
+TODO: Convert to Modules
+TODO: Add instrutions
+TODO: Implement Hangman
+TODO: Implement Cows and Bulls
+"""
+
 from random import randint, choice
 from guessing_game import *
 import time
@@ -80,6 +87,7 @@ def reverse_guessing_game():
     phrases = ["Is the number?", "Is it?", "Could it be?", "What is?", "It has to be!",
                "My guess is!", "I know it's!", "My senses tell me the number is.",
                "Roses are red,\nViolets are blue,\nThe number must be."]
+
     while True:
         guess = randint(low, high)
         phrase = choice(phrases)
@@ -99,6 +107,36 @@ def reverse_guessing_game():
 
 def cows_and_bulls():
     print("This is the Cows and Bulls game.")
+    digits = intput("How many digits?")
+    low = 10 ** (digits - 1)
+    high = 10 ** digits - 1
+    number = str(randint(low, high))
+    print(low)
+    print(high)
+    print(number)
+
+    while True:
+        guess = input("Enter a guess\n> ")
+        if guess == number:
+            print("You win!")
+            break
+        bulls = 0
+        cows = 0
+        bulls_index = []
+
+        for i in range(digits):
+            if guess[i] == number[i]:
+                bulls += 1
+                bulls_index.append(guess[i])
+            elif guess[i] in number:
+                cows += 1
+                    
+
+        print("{} {}, {} {}".format(bulls, "bull" if bulls == 1 else "bulls", cows, "cow" if cows == 1 else "cows"))
+
+
+
+
 
 
 def hangman():
