@@ -7,6 +7,7 @@ TODO: Implement Cows and Bulls
 
 from random import randint, choice
 from guessing_game import *
+from hangman import *
 import time
 
 games = ["Guessing Game", "Hangman", "Cows and Bulls", "Reverse Guessing Game"]
@@ -108,13 +109,8 @@ def reverse_guessing_game():
 def cows_and_bulls():
     print("This is the Cows and Bulls game.")
     digits = intput("How many digits?")
-    low = 10 ** (digits - 1)
-    high = 10 ** digits - 1
-    number = str(randint(low, high))
-    print(low)
-    print(high)
+    number = ''.join(["{}".format(randint(0, 9)) for num in range(0, digits)])
     print(number)
-
     while True:
         guess = input("Enter a guess\n> ")
         if guess == number:
@@ -130,17 +126,20 @@ def cows_and_bulls():
                 bulls_index.append(guess[i])
             elif guess[i] in number:
                 cows += 1
-                    
-
         print("{} {}, {} {}".format(bulls, "bull" if bulls == 1 else "bulls", cows, "cow" if cows == 1 else "cows"))
-
-
-
-
 
 
 def hangman():
     print("This is the Hangman game.")
+    words = ["apple", "banana", "carrot"]
+    game = Hangman(choice(words))
+    while not game.game_over():
+        if game.guess(input("Enter a guess\n> ")):
+            print("Good guess!")
+        else:
+            print("Bad guess.")
+        game.display()
+    print("You won!")
 
 
 def main_menu():
