@@ -1,2 +1,2 @@
 # Minigames
-A series of minigames played through the Python terminal.
+A series of text-based minigames played through the Python terminal.
