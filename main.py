@@ -1,8 +1,7 @@
 """
 TODO: Convert to Modules
-TODO: Add instrutions
-TODO: Implement Hangman
-TODO: Implement Cows and Bulls
+TODO: Add instructions
+TODO: Implement Exception Handling
 """
 
 from random import randint, choice
@@ -10,15 +9,18 @@ from guessing_game import *
 from hangman import *
 import time
 
-games = ["Guessing Game", "Hangman", "Cows and Bulls", "Reverse Guessing Game"]
-games.sort()
 
-games_list = games.copy()
-for i in range(len(games_list)):
-    games_list[i] = games_list[i].lower()
-    games_list[i] = games_list[i].replace(" ", "_")
+def main():
+    global games, choices
+    games = ["Guessing Game", "Hangman", "Cows and Bulls", "Reverse Guessing Game"]
+    games.sort()
 
-choices = dict(zip(range(1, len(games) + 1), games_list))
+    games_list = games.copy()
+    for i in range(len(games_list)):
+        games_list[i] = games_list[i].lower()
+        games_list[i] = games_list[i].replace(" ", "_")
+
+    choices = dict(zip(range(1, len(games) + 1), games_list))
 
 
 def intput(prompt=""):
@@ -120,11 +122,15 @@ def cows_and_bulls():
         cows = 0
         bulls_index = []
 
+        # Find Bulls first
         for i in range(digits):
             if guess[i] == number[i]:
                 bulls += 1
-                bulls_index.append(guess[i])
-            elif guess[i] in number:
+                bulls_index.append(i)
+
+        # Find cows, ignoring bull indexes
+        for i in range(digits):
+            if guess[i] in [j for p, j in enumerate(number) if p not in bulls_index]:
                 cows += 1
         print("{} {}, {} {}".format(bulls, "bull" if bulls == 1 else "bulls", cows, "cow" if cows == 1 else "cows"))
 
@@ -148,17 +154,18 @@ def main_menu():
         for index, game in enumerate(games, 1):
             print("\t{}. {}".format(index, game))
         print("\t{}. Exit".format(len(choices) + 1))
-        choice = intput()
+        selection = intput()
     except IndexError:
         print("Please select a number between 1 and", len(games) + 1)
     else:
-        if choice == len(choices) + 1:
+        if selection == len(choices) + 1:
             print("Thanks for playing, goodbye!")
             exit(0)
-        return eval(choices.get(choice))()
+        return eval(choices.get(selection))()
 
 
 if __name__ == '__main__':
+    main()
     print("Welcome to John's Mini Games!")
     time.sleep(1)
     main_menu()
