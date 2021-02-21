@@ -4,7 +4,8 @@ TODO: Add instructions
 TODO: Implement Exception Handling
 """
 
-from random import randint, choice
+from random import randint, sample
+from english_words import english_words_set as english
 from guessing_game import *
 from hangman import *
 import time
@@ -23,6 +24,7 @@ def main():
     choices = dict(zip(range(1, len(games) + 1), games_list))
 
 
+# A function that returns a user-inputted integer
 def intput(prompt=""):
     try:
         symbol = "\n> " if prompt != "" else "> "
@@ -137,8 +139,7 @@ def cows_and_bulls():
 
 def hangman():
     print("This is the Hangman game.")
-    words = ["apple", "banana", "carrot"]
-    game = Hangman(choice(words))
+    game = Hangman(sample(english, 1)[0])
     while not game.game_over():
         if game.guess(input("Enter a guess\n> ")):
             print("Good guess!")
