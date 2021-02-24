@@ -4,7 +4,7 @@ TODO: Add instructions
 TODO: Implement Exception Handling
 """
 
-from random import randint, sample
+from random import randint, sample, choice
 from english_words import english_words_set as english
 from guessing_game import *
 from hangman import *
