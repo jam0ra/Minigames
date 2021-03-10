@@ -8,7 +8,10 @@ from random import randint, sample, choice
 from english_words import english_words_set as english
 from guessing_game import *
 from hangman import *
+from datetime import datetime
+from database import Database
 import time
+
 
 
 def main():
@@ -43,7 +46,7 @@ def guessing_game():
     gg.b = intput("Please enter the maximum number")  # Upper bound, inclusive
     gg.secret = randint(gg.a, gg.b)  # A random number between a and b that is to be guessed
     gg.guesses = intput("Please enter the maximum number of guesses")  # Max number of tries to guess correctly
-
+    won = True
     while True:
         while True:
             try:
@@ -76,8 +79,13 @@ def guessing_game():
         gg.guesses -= 1
         if gg.guesses == 0:
             print("Sorry, you lost! The number was {}.".format(gg.secret))
+            won = False
             break
         time.sleep(1)
+    if won:
+        with Database("Guessing Game") as scores_db:
+            scores_db.add_record(datetime.today().strftime('%d/%m/%Y'), name, gg.guesses, gg.b - gg.a + 1)
+            scores_db.display()
     if input("Would you like to play again?\n> ").lower() not in ("yes", "y"):
         print("Returning to the main menu.")
         main_menu()
@@ -131,9 +139,11 @@ def cows_and_bulls():
                 bulls_index.append(i)
 
         # Find cows, ignoring bull indexes
+        previous_cows = []
         for i in range(digits):
-            if guess[i] in [j for p, j in enumerate(number) if p not in bulls_index]:
+            if guess[i] in [j for p, j in enumerate(number) if p not in bulls_index] and guess[i] not in previous_cows:
                 cows += 1
+                previous_cows += guess[i]
         print("{} {}, {} {}".format(bulls, "bull" if bulls == 1 else "bulls", cows, "cow" if cows == 1 else "cows"))
 
 
@@ -168,5 +178,8 @@ def main_menu():
 if __name__ == '__main__':
     main()
     print("Welcome to John's Mini Games!")
+    global name
+    name = input("What is your name?\n> ")
+    print(f'Welcome, {name}!')
     time.sleep(1)
     main_menu()
