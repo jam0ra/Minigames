@@ -85,7 +85,6 @@ def guessing_game():
     if won:
         with Database("Guessing Game") as scores_db:
             scores_db.add_record(datetime.today().strftime('%d/%m/%Y'), name, gg.guesses, gg.b - gg.a + 1)
-            scores_db.display()
     if input("Would you like to play again?\n> ").lower() not in ("yes", "y"):
         print("Returning to the main menu.")
         main_menu()
@@ -158,18 +157,26 @@ def hangman():
         game.display()
     print("You won!")
 
+def leaderboards():
+    print("Leaderboards")
+
+
+    main_menu()
 
 def main_menu():
     try:
-        print("Please select one of the following {} options".format(len(games)))
+        print("Please select one of the following {} options".format(len(games) + 2))
         for index, game in enumerate(games, 1):
             print("\t{}. {}".format(index, game))
-        print("\t{}. Exit".format(len(choices) + 1))
+        print("\t{}. View Leaderboards".format(len(choices) + 1))
+        print("\t{}. Exit".format(len(choices) + 2))
         selection = intput()
     except IndexError:
-        print("Please select a number between 1 and", len(games) + 1)
+        print("Please enter a number between 1 and", len(games) + 2)
     else:
         if selection == len(choices) + 1:
+            return leaderboards()
+        elif selection == len(choices) + 2:
             print("Thanks for playing, goodbye!")
             exit(0)
         return eval(choices.get(selection))()
