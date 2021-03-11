@@ -148,15 +148,16 @@ def cows_and_bulls():
 
 def hangman():
     print("This is the Hangman game.")
-    word = sample(english, 1)[0]
+    word = sample(english, 1)[0].lower()
     game = Hangman(word)
     while not game.game_over():
-        print(f"You have {game.lives} remaining.")
+        print(f"You have {game.lives} lives remaining.")
         if game.guess(input("Enter a guess\n> ")):
             print("Good guess!")
         else:
             print("Bad guess.")
         game.display()
+        time.sleep(1)
     if game.lives > 0:
         print("You won!")
         with Database("Hangman") as scores_db:
@@ -175,7 +176,23 @@ def hangman():
 
 def leaderboards():
     print("Leaderboards")
-    main_menu()
+    try:
+        print("Which game would you like to see the leaderboard for?")
+        for index, game in enumerate(games, 1):
+            print("\t{}. {}".format(index, game))
+        print("\t{}. Main Menu".format(len(games) + 1))
+        selection = intput()
+    except IndexError:
+        print("Please enter a number between 1 and", len(games) + 1)
+    else:
+        if selection == len(games) + 1:
+            main_menu()
+        else:
+            with Database(games[selection - 1]) as s:
+                s.display()
+            time.sleep(1)
+            input("Press enter to continue...")
+        main_menu()
 
 
 def instructions():

@@ -1,3 +1,4 @@
+from os import name
 import sqlite3
 
 guessing_game = '''
@@ -41,15 +42,31 @@ class Database:
             self.connection.commit()
         self.connection.close()
 
-    def display(self, order="date"):
-        self.cursor.execute(f"SELECT rowid, * FROM {self.name} ORDER BY {order} DESC")
+    def display(self, order="attempts"):
+        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} DESC")
+        if self.name == 'hangman':
+            value = 'Word'
+        elif self.name == 'guessing_game':
+            value = 'Range'
+        elif self.name == 'cows_and_bulls':
+            value = 'Digits'
+        print(f'Date\t\tName\t\tAttempts\t{value}\t')
+        print('-' * 60)
         for row in self.cursor.fetchall():
-            print(row)
+            print(f'{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
 
-    def display_values(self, order="date", values=10):
-        self.cursor.execute(f"SELECT rowid, * FROM {self.name} ORDER BY {order} DESC")
+    def display_values(self, order="attempts", values=10):
+        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} DESC")
+        if self.name == 'hangman':
+            value = 'Word'
+        elif self.name == 'guessing_game':
+            value = 'Range'
+        elif self.name == 'cows_and_bulls':
+            value = 'Digits'
+        print(f'Date\t\tName\t\tAttempts\t{value}\t')
+        print('-' * 60)
         for row in self.cursor.fetchmany(values):
-            print(row)
+            print(f'{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
 
     def add_record(self, date, player, attempts, value):
         self.cursor.execute(f"INSERT INTO {self.name} VALUES (?, ?, ?, ?)", (date, player, attempts, str(value)))
