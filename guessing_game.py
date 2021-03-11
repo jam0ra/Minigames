@@ -47,8 +47,8 @@ class GuessingGame:
     @guesses.setter
     def guesses(self, value):
         try:
-            assert value > 0
+            assert value >= 0
         except AssertionError:
-            print("Guesses must be > 0")
+            print("Guesses must be >= 0")
         else:
             self._guesses = value
