@@ -148,20 +148,40 @@ def cows_and_bulls():
 
 def hangman():
     print("This is the Hangman game.")
-    game = Hangman(sample(english, 1)[0])
+    word = sample(english, 1)[0]
+    game = Hangman(word)
     while not game.game_over():
+        print(f"You have {game.lives} remaining.")
         if game.guess(input("Enter a guess\n> ")):
             print("Good guess!")
         else:
             print("Bad guess.")
         game.display()
-    print("You won!")
+    if game.lives > 0:
+        print("You won!")
+        with Database("Hangman") as scores_db:
+            scores_db.add_record(datetime.today().strftime('%d/%m/%Y'), name, game.lives, game.word) 
+    else:
+        print("Sorry, you lost!")
+        print("The word was " + game.word)
+    
+    if input("Would you like to play again?\n> ").lower() not in ("yes", "y"):
+        print("Returning to the main menu.")
+        main_menu()
+    else:
+        hangman()
+    
+
 
 def leaderboards():
     print("Leaderboards")
-
-
     main_menu()
+
+
+def instructions():
+    print("Instructions")
+    main_menu()
+
 
 def main_menu():
     try:
@@ -169,14 +189,17 @@ def main_menu():
         for index, game in enumerate(games, 1):
             print("\t{}. {}".format(index, game))
         print("\t{}. View Leaderboards".format(len(choices) + 1))
-        print("\t{}. Exit".format(len(choices) + 2))
+        print("\t{}. Game Instructions".format(len(choices) + 2))
+        print("\t{}. Exit".format(len(choices) + 3))
         selection = intput()
     except IndexError:
-        print("Please enter a number between 1 and", len(games) + 2)
+        print("Please enter a number between 1 and", len(games) + 3)
     else:
         if selection == len(choices) + 1:
             return leaderboards()
         elif selection == len(choices) + 2:
+            return instructions()
+        elif selection == len(choices) + 3:
             print("Thanks for playing, goodbye!")
             exit(0)
         return eval(choices.get(selection))()

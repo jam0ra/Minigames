@@ -26,6 +26,6 @@ class Hangman:
         return True
 
     def game_over(self):
-        if self.output.replace(" ", "") == self.word:
+        if self.output.replace(" ", "") == self.word or self.lives == 0:
             return True
         return False
