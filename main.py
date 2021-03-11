@@ -121,9 +121,10 @@ def cows_and_bulls():
     print("This is the Cows and Bulls game.")
     digits = intput("How many digits?")
     number = ''.join(["{}".format(randint(0, 9)) for num in range(0, digits)])
-    print(number)
+    attempts = 0
     while True:
         guess = input("Enter a guess\n> ")
+        attempts += 1
         if guess == number:
             print("You win!")
             break
@@ -144,6 +145,15 @@ def cows_and_bulls():
                 cows += 1
                 previous_cows += guess[i]
         print("{} {}, {} {}".format(bulls, "bull" if bulls == 1 else "bulls", cows, "cow" if cows == 1 else "cows"))
+    
+    with Database("Cows and Bulls") as scores_db:
+        scores_db.add_record(datetime.today().strftime('%d/%m/%Y'), name, attempts, digits) 
+    
+    if input("Would you like to play again?\n> ").lower() not in ("yes", "y"):
+        print("Returning to the main menu.")
+        main_menu()
+    else:
+        cows_and_bulls()
 
 
 def hangman():
@@ -188,6 +198,7 @@ def leaderboards():
         if selection == len(games) + 1:
             main_menu()
         else:
+            print(f'\n{games[selection - 1]} Leaderboard')
             with Database(games[selection - 1]) as s:
                 s.display()
             time.sleep(1)
@@ -224,7 +235,7 @@ def main_menu():
 
 if __name__ == '__main__':
     main()
-    print("Welcome to John's Mini Games!")
+    print("Welcome to John's Minigames!")
     global name
     name = input("What is your name?\n> ")
     print(f'Welcome, {name}!')

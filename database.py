@@ -42,31 +42,33 @@ class Database:
             self.connection.commit()
         self.connection.close()
 
-    def display(self, order="attempts"):
-        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} DESC")
+    def display(self, order="attempts", direction="ASC"):
+        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} {direction}")
         if self.name == 'hangman':
             value = 'Word'
         elif self.name == 'guessing_game':
             value = 'Range'
         elif self.name == 'cows_and_bulls':
             value = 'Digits'
-        print(f'Date\t\tName\t\tAttempts\t{value}\t')
-        print('-' * 60)
-        for row in self.cursor.fetchall():
-            print(f'{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
+        print('-' * 61)
+        print(f'Rank\tDate\t\tName\t\tAttempts\t{value}\t')
+        print('-' * 61)
+        for i, row in enumerate(self.cursor.fetchall()):
+            print(f'{i+1}\t{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
 
-    def display_values(self, order="attempts", values=10):
-        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} DESC")
+    def display_values(self, order="attempts", values=10, direction="ASC"):
+        self.cursor.execute(f"SELECT * FROM {self.name} ORDER BY {order} {direction}")
         if self.name == 'hangman':
             value = 'Word'
         elif self.name == 'guessing_game':
             value = 'Range'
         elif self.name == 'cows_and_bulls':
             value = 'Digits'
-        print(f'Date\t\tName\t\tAttempts\t{value}\t')
-        print('-' * 60)
-        for row in self.cursor.fetchmany(values):
-            print(f'{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
+        print('-' * 61)
+        print(f'Rank\tDate\t\tName\t\tAttempts\t{value}\t')
+        print('-' * 61)
+        for i, row in enumerate(self.cursor.fetchmany(values)):
+            print(f'{i+1}\t{row[0]}\t{row[1]}\t\t{row[2]}\t\t{row[3]}')
 
     def add_record(self, date, player, attempts, value):
         self.cursor.execute(f"INSERT INTO {self.name} VALUES (?, ?, ?, ?)", (date, player, attempts, str(value)))
