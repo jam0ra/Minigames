@@ -14,3 +14,9 @@ The current games are:
   - The classic game of Hangman, where the computer randomly selects a word and the user attempts to correctly guess it.
 - Cows and Bulls
   - A game where a user must attempt to correctly guess a code of n digits, in the correct order, where n is chosen by the user.
+  
+  ## General Input Tips ##
+  - Enter a single input into the terminal line. This prevents the system from misreading inputs
+    - Sample good input: ` 10 `
+    - Sample bad input: ` 10 20 30 `
+ 
